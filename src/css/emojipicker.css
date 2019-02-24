@@ -30,10 +30,54 @@
   .emojipicker .emojipicker-content[data-placeholder]:focus:before {
     display: none; }
   .emojipicker .emojipicker-popover {
-    min-width: 360px; }
+    min-width: 307px; }
     .emojipicker .emojipicker-popover .popover-title {
       padding: 0;
       margin: 0;
       line-height: 3.5rem;
       font-size: 1.65rem;
       text-align: center; }
+      .emojipicker .emojipicker-popover .popover-title:empty {
+        display: none; }
+    .emojipicker .emojipicker-popover .popover-content {
+      display: block;
+      position: relative;
+      overflow-y: auto;
+      max-height: 240px; }
+      .emojipicker .emojipicker-popover .popover-content > .header-list {
+        display: inline-block;
+        position: -webkit-sticky;
+        position: sticky;
+        top: -9px;
+        margin-top: 0px;
+        line-height: 24px;
+        background: #ffffff;
+        width: 100%;
+        z-index: 1; }
+        .emojipicker .emojipicker-popover .popover-content > .header-list:after {
+          position: absolute;
+          display: inline-block;
+          left: 0;
+          right: 0;
+          bottom: -12px;
+          height: 12px;
+          content: "";
+          background-image: linear-gradient(-180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.5) 31%, rgba(255, 255, 255, 0) 100%); }
+      .emojipicker .emojipicker-popover .popover-content > .media-list {
+        display: inline-block;
+        /*width: 100%;*/
+        margin-left: -6px;
+        margin-right: -6px;
+        margin-bottom: 10px;
+        clear: both; }
+        .emojipicker .emojipicker-popover .popover-content > .media-list .media {
+          margin: 0;
+          padding: 0;
+          float: left; }
+          .emojipicker .emojipicker-popover .popover-content > .media-list .media .media-left {
+            margin: 0;
+            padding: 4px 6px;
+            font-size: 18px;
+            text-decoration: none; }
+            .emojipicker .emojipicker-popover .popover-content > .media-list .media .media-left:hover, .emojipicker .emojipicker-popover .popover-content > .media-list .media .media-left:focus {
+              text-decoration: none; }

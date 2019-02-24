@@ -29,6 +29,10 @@
                             <label for="some-message2">Message textarea:</label>
                             <textarea class="form-control" id="some-message2" placeholder="Type your message here..."></textarea>
                         </div>
+                        <div class="form-group">
+                            <label for="some-message3">Message input:</label>
+                            <input type="text" class="form-control" id="some-message3" placeholder="Type your message here...">
+                        </div>
 
                     </div>
                 </div>
@@ -39,8 +43,49 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>        <script src="../src/js/emojipicker.js"></script>
         <script type="text/javascript">
             $(document).ready(function () {
-                $('#some-message1').emojipicker();
-                $('#some-message2').emojipicker();
+                $('#some-message1').emojipicker({
+                    debug: false
+                });
+                $('#some-message2').emojipicker({
+                    debug: false,
+                    emojiList: [
+                        {
+                            "title": "Moon 1",
+                            "source": "🌔",
+                            "unicode": "\\uD83C\\uDF14",
+                            "entity": "&#x1F314;",
+                            "category": "Category 6",
+                            "order": 3,
+                            "keywords": ["moon", "gibbous moon"],
+                            "alias": ["moon", "waxing_gibbous_moon"],
+                            "shortcode": null
+                        }, {
+                            "title": "Moon 2",
+                            "source": "🌔",
+                            "unicode": "\\uD83C\\uDF14",
+                            "entity": "&#x1F314;",
+                            "category": "Category 6",
+                            "order": 2,
+                            "keywords": ["moon", "gibbous moon"],
+                            "alias": ["moon", "waxing_gibbous_moon"],
+                            "shortcode": null
+                        }, {
+                            "title": "Moon 3",
+                            "source": "🌔",
+                            "unicode": "\\uD83C\\uDF14",
+                            "entity": "&#x1F314;",
+                            "category": "Category 6",
+                            "order": 1,
+                            "keywords": ["moon", "gibbous moon"],
+                            "alias": ["moon", "waxing_gibbous_moon"],
+                            "shortcode": null
+                        },
+                    ]
+                });
+                $('#some-message3').emojipicker({
+                    debug: false,
+                    emojiList: '[{"title": "Moon 1","source": "🌔","unicode": "\uD83C\uDF14","entity": "&#x1F314;","category": "Category 6","order": 3,"keywords": ["moon", "gibbous moon"],"alias": ["moon", "waxing_gibbous_moon"],"shortcode": null}, {"title": "Moon 2","source": "🌔","unicode": "\uD83C\uDF14","entity": "&#x1F314;","category": "Category 6","order": 2,"keywords": ["moon", "gibbous moon"],"alias": ["moon", "waxing_gibbous_moon"],"shortcode": null}, {"title": "Moon 3","source": "🌔","unicode": "\uD83C\uDF14","entity": "&#x1F314;","category": "Category 6","order": 1,"keywords": ["moon", "gibbous moon"],"alias": ["moon", "waxing_gibbous_moon"],"shortcode": null}]'
+                });
             });
         </script>
     </body>

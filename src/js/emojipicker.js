@@ -34,6 +34,7 @@
             input: '.form-control', // string, selector or jQuery object of input
             toggle: '.emojipicker-toggle', // string, selector of emojipicker popover toggle
             template: '<div class="popover emojipicker-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>', // string, popover template
+            emojiList: '/json/emojipicker.json',
             debug: true, // boolean, flag if need debug in console log
             onShow: function onShow() { }, // The function that is called when the emojipicker popover is ready to be displayed
             onShown: function onShown() { }, // The function that is called when the emojipicker popover is displayed
@@ -57,8 +58,9 @@
                 // Configure variables
                 _this._$element = $('<div />');
                 _this._$input = $element instanceof jQuery ? $element : $($element);
-                _this._header = 'Test header';
-                _this._content = 'Test content';
+                _this._emojis = {};
+                _this._header = null;
+                _this._content = null;
 
                 // Wrap input and Add base emojipicker class
                 if(_this._$input) {
@@ -80,12 +82,15 @@
 
                     // Init popover component
                     _this._$popover = $toggle.popover({
-                        placement: 'right',
+                        placement: 'auto',
                         html: true,
                         trigger: 'focus',
                         template: _this._config.template,
                         title: function() {
-                            return _this._header;
+                            if(_this._header)
+                                return _this._header;
+                            else
+                                return '';
                         },
                         content: function() {
                             return _this._content;
@@ -139,7 +144,88 @@
                             }
                         });
                     });
+                } else {
+                    if(_this._config.debug)
+                        console.error('Option `input` must be configured', _this._$input);
+
+                    return;
                 }
+
+                // Get emojis list
+                if (config.emojiList) {
+                    if (typeof (config.emojiList) == "string") {
+                        try {
+
+                            _this._emojis = JSON.parse(config.emojiList);
+
+                            if(_this._config.debug)
+                                console.log('Parsing emoji list from config', _this._emojis);
+
+                        } catch (e) {
+                            try {
+                                _this._emojis = $.getJSON(config.emojiList, function (data) {
+
+                                    _this._emojis = data;
+
+                                    if(_this._config.debug)
+                                        console.log('Parsing emoji list from json file', _this._emojis);
+                                });
+                            } catch (e) {
+                                if(_this._config.debug)
+                                    console.error('Unable find json or parse', config.emojiList);
+                            }
+                        }
+                    } else if (typeof (config.emojiList) == "object") {
+
+                        _this._emojis = config.emojiList;
+
+                        if(_this._config.debug)
+                            console.log('Parsing emoji list from object', _this._emojis);
+                    }
+                } else {
+                    if(_this._config.debug)
+                        console.error('Option `emojiList` must be configured', config.emojiList);
+
+                    return;
+                }
+
+                // Build emoji popover
+                setTimeout(function () {
+                    if(_this._emojis.length > 0 && typeof (_this._emojis) == "object") {
+
+                        var categories = [];
+                        _this._content = '';
+                        $.each(_this._emojis, function(key, emoji) {
+                            //_this._content += emoji.title;
+                            categories.push(emoji.category);
+                        });
+                        categories = categories.filter(function (value, index, self) {
+                            return self.indexOf(value) === index;
+                        });
+                        $.each(categories, function(key, category) {
+                            _this._content += '<h5 class="header-list">' + category + '</h5>';
+                            _this._content += '<ul id="emoji-category-'+ (key+1) +'" class="media-list">';
+                            $.each(_this._emojis, function(key, emoji) {
+                                if(emoji.category == category) {
+                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
+                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
+                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
+                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
+                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
+                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
+                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
+                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
+                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
+                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
+                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
+                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
+                                }
+                            });
+                            _this._content += '</ul>';
+                        });
+                    }
+                }, 2000);
+
             }
 
             _createClass(EmojiPicker, {
