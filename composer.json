@@ -1,0 +1,26 @@
+{
+  "name": "wdmg/bootstrap-emojipicker-plugin",
+  "description": "Emoji picker plugin for Bootstrap 3",
+  "keywords": [
+    "twitter-bootstrap",
+    "bootstrap",
+    "datepicker",
+    "timepicker"
+  ],
+  "homepage": "https://github.com/wdmg/bootstrap-emojipicker/",
+  "authors": [
+    {
+      "name": "Alexsander Vyshnyvetskyy",
+      "email": "alex.vyshnyvetskyy@gmail.com"
+    },
+    {
+      "name": "W.D.M.Group, Ukraine",
+      "email": "wdmg.com.ua@gmail.com"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/wdmg/bootstrap-emojipicker/issues"
+  },
+  "license": "MIT",
+  "version": "1.0.3"
+}
