@@ -35,7 +35,7 @@
             toggle: '.emojipicker-toggle', // string, selector of emojipicker popover toggle
             template: '<div class="popover emojipicker-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>', // string, popover template
             emojiList: '/json/emojipicker.json',
-            debug: true, // boolean, flag if need debug in console log
+            debug: false, // boolean, flag if need debug in console log
             onShow: function onShow() { }, // The function that is called when the emojipicker popover is ready to be displayed
             onShown: function onShown() { }, // The function that is called when the emojipicker popover is displayed
             onHide: function onHide() { }, // The function that is called when emojipicker popover to prepare for hiding
@@ -58,6 +58,7 @@
                 // Configure variables
                 _this._$element = $('<div />');
                 _this._$input = $element instanceof jQuery ? $element : $($element);
+                _this._categories = {};
                 _this._emojis = {};
                 _this._header = null;
                 _this._content = null;
@@ -156,20 +157,33 @@
                     if (typeof (config.emojiList) == "string") {
                         try {
 
-                            _this._emojis = JSON.parse(config.emojiList);
+                            var data = JSON.parse(config.emojiList);
+
+                            if(data.categories)
+                                _this._categories = data.categories;
+
+                            if(data.emojis)
+                                _this._emojis = data.emojis;
 
                             if(_this._config.debug)
                                 console.log('Parsing emoji list from config', _this._emojis);
 
                         } catch (e) {
                             try {
-                                _this._emojis = $.getJSON(config.emojiList, function (data) {
+                                $.getJSON(config.emojiList, function (data) {
 
-                                    _this._emojis = data;
+                                    if(data.categories)
+                                        _this._categories = data.categories;
+
+                                    if(data.emojis)
+                                        _this._emojis = data.emojis;
 
                                     if(_this._config.debug)
                                         console.log('Parsing emoji list from json file', _this._emojis);
                                 });
+
+
+
                             } catch (e) {
                                 if(_this._config.debug)
                                     console.error('Unable find json or parse', config.emojiList);
@@ -177,7 +191,11 @@
                         }
                     } else if (typeof (config.emojiList) == "object") {
 
-                        _this._emojis = config.emojiList;
+                        if(config.emojiList.categories)
+                            _this._categories = config.emojiList.categories;
+
+                        if(config.emojiList.emojis)
+                            _this._emojis = config.emojiList.emojis;
 
                         if(_this._config.debug)
                             console.log('Parsing emoji list from object', _this._emojis);
@@ -191,37 +209,57 @@
 
                 // Build emoji popover
                 setTimeout(function () {
+
+
                     if(_this._emojis.length > 0 && typeof (_this._emojis) == "object") {
 
                         var categories = [];
                         _this._content = '';
-                        $.each(_this._emojis, function(key, emoji) {
-                            //_this._content += emoji.title;
-                            categories.push(emoji.category);
-                        });
+
+                        if(_this._categories.length > 0) {
+                            $.each(_this._categories, function(key, category) {
+                                categories.push(category);
+                            });
+                        } else {
+                            $.each(_this._emojis, function(key, emoji) {
+                                /*categories.push({
+                                    id: key,
+                                    title: emoji.category
+                                });*/
+
+                                var category = {
+                                    id: key,
+                                    title: emoji.category
+                                };
+                                categories.push(category);
+
+
+                            });
+                        }
+
+                        // Only unique categories
                         categories = categories.filter(function (value, index, self) {
                             return self.indexOf(value) === index;
                         });
+                        categories = categories.reduce((obj, val) => obj.concat(obj.find(val2 => val2.title === val.title) ? [] : [val]), []);
+
+                        // Generate emoji blocks by category
                         $.each(categories, function(key, category) {
-                            _this._content += '<h5 class="header-list">' + category + '</h5>';
-                            _this._content += '<ul id="emoji-category-'+ (key+1) +'" class="media-list">';
+                            var html = "";
+                            var count = 0;
+                            html += '<h5 class="header-list">' + category.title + '</h5>';
+                            html += '<ul id="emoji-category-'+ (key+1) +'" class="media-list">';
                             $.each(_this._emojis, function(key, emoji) {
-                                if(emoji.category == category) {
-                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
-                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
-                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
-                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
-                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
-                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
-                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
-                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
-                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
-                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
-                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
-                                    _this._content += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
+                                if(emoji.category == category.id || emoji.category == category.title) {
+                                    html += '<li class="media"><a href="#" class="media-left" title="' + emoji.title + '">' + emoji.source + '</a></li>';
+                                    count++;
                                 }
                             });
-                            _this._content += '</ul>';
+                            html += '</ul>';
+
+                            if(count > 0)
+                                _this._content += html;
+
                         });
                     }
                 }, 2000);

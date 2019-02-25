@@ -43,14 +43,17 @@
       display: block;
       position: relative;
       overflow-y: auto;
-      max-height: 240px; }
+      max-height: 240px;
+      margin-top: 8px; }
       .emojipicker .emojipicker-popover .popover-content > .header-list {
         display: inline-block;
         position: -webkit-sticky;
         position: sticky;
         top: -9px;
         margin-top: 0px;
+        padding-left: 1px;
         line-height: 24px;
+        color: #676767;
         background: #ffffff;
         width: 100%;
         z-index: 1; }
