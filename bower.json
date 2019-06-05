@@ -17,10 +17,13 @@
     "composer.json",
     "Gruntfile.js",
     "package.json",
-    "package-lock.json"
+    "package-lock.json",
+    "vendor/bower-asset",
+    "tests"
   ],
   "authors": [
-    "W.D.M.Group, Ukraine <wdmg.com.ua@gmail.com>"
+    "W.D.M.Group",
+    "Ukraine <wdmg.com.ua@gmail.com>"
   ],
   "homepage": "http://wdmg.com.ua/",
   "license": "MIT",
